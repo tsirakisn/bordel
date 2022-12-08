@@ -62,6 +62,10 @@ docker_enter() {
         -v "${HOME}/.gitconfig:/home/${user}/.gitconfig" \
         -v "${HOME}/.repoconfig:/home/${user}/.repoconfig" \
         -v "${HOME}/.repo_.gitconfig.json:/home/${user}/.repo_.gitconfig.json" \
+        -v "/usr/share/git-core/contrib/diff-highlight:/usr/share/git-core/contrib/diff-highlight" \
+        -v "${HOME}/.vimrc:/home/${user}/.vimrc" \
+        -v "${HOME}/.bashrc:/home/${user}/.bashrc" \
+        -v "${HOME}/openxt:/home/${user}/shared" \
         "${opts[@]}" \
         "${name}"
 }

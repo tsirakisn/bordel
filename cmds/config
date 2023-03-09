@@ -113,7 +113,17 @@ config_copy_template() {
     fi
 }
 
+config_get_conf_version() {
+    echo "$(grep "CONF_VERSION =" ${TOP}/${BUILD_DIR}/${CONF_DIR}/local.conf | awk '{ print $3 }' | sed 's/"//g')"
+}
+
 config_generate_env_file() {
+    if [[ "$(config_get_conf_version)" == "1" ]]; then
+        PT_ADDITIONS_VAR_NAME="BB_ENV_EXTRAWHITE"
+    else
+        PT_ADDITIONS_VAR_NAME="BB_ENV_PASSTHROUGH_ADDITIONS"
+    fi
+
     cat >"${TOP}/${BUILD_DIR}/build_env" <<EOF
 #!/bin/bash
 
@@ -126,7 +136,7 @@ BUILD_DIR="\$( cd "\$( dirname "\${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 
 BBPATH="\${BUILD_DIR}/layers/bitbake/bin:\${BUILD_DIR}/layers/openembedded-core/scripts:"
 
-BB_ENV_EXTRAWHITE="MACHINE DISTRO BUILD_UID LAYERS_DIR"
+${PT_ADDITIONS_VAR_NAME}="MACHINE DISTRO BUILD_UID LAYERS_DIR"
 LAYERS_DIR="\${BUILD_DIR}/layers"
 BUILDDIR="\${BUILD_DIR}"
 PATH=\$BBPATH\$(echo "\$PATH" | sed -e "s|:\$BBPATH|:|g" -e "s|^\$BBPATH||")
@@ -139,7 +149,7 @@ bb32() {
 }
 
 cd "\${BUILDDIR}"
-export BB_ENV_EXTRAWHITE LAYERS_DIR BUILDDIR PATH
+export ${PT_ADDITIONS_VAR_NAME} LAYERS_DIR BUILDDIR PATH
 EOF
 }
 

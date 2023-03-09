@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -yq \
         guilt iasl quilt bin86 \
         bcc libsdl1.2-dev liburi-perl genisoimage policycoreutils unzip vim \
         rpm curl libncurses5-dev libncursesw5 libc6-dev-i386 libelf-dev \
-        xorriso mtools dosfstools \
+        xorriso mtools dosfstools zstd lz4 meld \
         file byobu man ca-certificates locales && \
         rm -rf /var/lib/apt-lists/* && \
         echo "dash dash/sh boolean false" | debconf-set-selections && \
